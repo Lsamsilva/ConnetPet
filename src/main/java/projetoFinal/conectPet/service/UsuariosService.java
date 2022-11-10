@@ -33,7 +33,8 @@ public class UsuariosService {
                 usuarioCreateRequest.getDataNascimento(),
                 usuarioCreateRequest.getEmail(),
                 usuarioCreateRequest.getCidade(),
-                usuarioCreateRequest.getEstado());
+                usuarioCreateRequest.getEstado()
+        );
     }
 
     public UsuarioResponse buscarPorId(Integer idUsuario) {
@@ -99,8 +100,8 @@ public class UsuariosService {
 
         var usuarioAtualizado = usuarioEncontrado.get();
         usuarioAtualizado.setEmail(usuarioUpdateResquest.getEmail());
-        usuarioAtualizado.setCidade(usuarioAtualizado.getCidade());
-        usuarioAtualizado.setEstado(usuarioAtualizado.getEstado());
+        usuarioAtualizado.setCidade(usuarioUpdateResquest.getCidade());
+        usuarioAtualizado.setEstado(usuarioUpdateResquest.getEstado());
 
         var usuarioSalvo = repository.save(usuarioAtualizado);
         return new UsuarioResponse(

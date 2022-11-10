@@ -3,130 +3,113 @@ package projetoFinal.conectPet.service;
 
 import org.springframework.stereotype.Service;
 import projetoFinal.conectPet.domain.dto.DoacaoCreateRequest;
+import projetoFinal.conectPet.domain.dto.DoacaoResponse;
 import projetoFinal.conectPet.domain.dto.DoacaoUpdateRequest;
 import projetoFinal.conectPet.domain.entity.DoacaoEntity;
 import projetoFinal.conectPet.domain.entity.UsuarioEntity;
 import projetoFinal.conectPet.exception.DoacaoInvalidoException;
 import projetoFinal.conectPet.exception.DoacaoNaoEncontradaException;
+import projetoFinal.conectPet.repository.DoacaoRepository;
 
+import javax.persistence.criteria.CriteriaBuilder;
 import java.util.ArrayList;
 import java.util.List;
 
 @Service
 public class DoacoesService {
 
-    private static List<DoacaoEntity> listaDeDoacao;
+    private final DoacaoRepository repository;
 
-    private static int proximoId = 1;
+    public DoacoesService (final DoacaoRepository repository){this.repository = repository;}
 
-    public DoacoesService(){
-        if (listaDeDoacao == null){
-            listaDeDoacao = new ArrayList<>();
-            listaDeDoacao.add(new DoacaoEntity(proximoId++,"Scooby","cachorro", 1 ,5 , 4  , new UsuarioEntity()));
+    public DoacaoResponse criarDoacao (DoacaoCreateRequest doacaoCreateRequest){
+
+        var novaDoacao = new DoacaoEntity();
+        novaDoacao.setNome(doacaoCreateRequest.getNome());
+        novaDoacao.setEspecie(doacaoCreateRequest.getEspecie());
+        novaDoacao.setIdade(doacaoCreateRequest.getIdade());
+        novaDoacao.setNivelDeFofura(doacaoCreateRequest.getNivelDeFofura());
+        novaDoacao.setNivelDeCarencia(doacaoCreateRequest.getNivelDeCarencia());
+        novaDoacao.setUsuario(doacaoCreateRequest.getUsuario());
+
+        var doacaoSalva = repository.save(novaDoacao);
+        return new DoacaoResponse(
+                doacaoSalva.getId(),
+                doacaoSalva.getNome(),
+                doacaoSalva.getEspecie(),
+                doacaoSalva.getIdade(),
+                doacaoSalva.getNivelDeFofura(),
+                doacaoSalva.getNivelDeCarencia(),
+                doacaoSalva.getUsuario()
+        );
+
+    }
+
+    public DoacaoResponse buscarPorId (Integer idDoacao){
+        var doacaoEncontrada = repository.findById(idDoacao);
+
+        if (doacaoEncontrada.isEmpty()){
+            //throw new DoacaoNaoEncontradoException();
+        }
+
+        var doacaoSalva = doacaoEncontrada.get();
+        return new DoacaoResponse(
+                doacaoSalva.getId(),
+                doacaoSalva.getNome(),
+                doacaoSalva.getEspecie(),
+                doacaoSalva.getIdade(),
+                doacaoSalva.getNivelDeFofura(),
+                doacaoSalva.getNivelDeCarencia(),
+                doacaoSalva.getUsuario()
+        );
+    }
+
+    public DoacaoResponse buscarPorNome (String nome){
+
+        try{
+            var doacaoEncontrada = repository.findByNome(nome);
+
+            return new DoacaoResponse(
+                    doacaoEncontrada.getId(),
+                    doacaoEncontrada.getNome(),
+                    doacaoEncontrada.getEspecie(),
+                    doacaoEncontrada.getIdade(),
+                    doacaoEncontrada.getNivelDeFofura(),
+                    doacaoEncontrada.getNivelDeCarencia(),
+                    doacaoEncontrada.getUsuario()
+            );
+        }catch (DoacaoNaoEncontradaException e){
+            throw new DoacaoNaoEncontradaException();
         }
     }
 
+    public DoacaoResponse atualizarDoacao (Integer idDoacao , DoacaoUpdateRequest doacaoUpdateRequest){
 
-    public DoacaoEntity criarDoacao (DoacaoCreateRequest doacoesCreateRequest){
-
-        if (!doacoesCreateRequest.getEspecie().equalsIgnoreCase("cachorro") && !doacoesCreateRequest.getEspecie().equalsIgnoreCase("gato")){
-            throw new DoacaoInvalidoException("Espécie autorizadas são: Cachorro e Gato");
-        }
-
-        var novaDoacao = new DoacaoEntity
-                (proximoId++,
-                 doacoesCreateRequest.getNome(),
-                 doacoesCreateRequest.getEspecie(),
-                 doacoesCreateRequest.getIdade(),
-                 doacoesCreateRequest.getNivelDeFofura(),
-                 doacoesCreateRequest.getNivelDeCarencia(),
-                 doacoesCreateRequest.getUsuario()
-                 );
-        listaDeDoacao.add(novaDoacao);
-
-        return novaDoacao;
-    }
-
-    public List<DoacaoEntity> listar(){
-        return listaDeDoacao;
-    }
-
-
-    public DoacaoEntity buscarPorId(int idDoacao) {
-        var doacaoEncontrada = listaDeDoacao.stream()
-                .filter(doacao -> doacao.getId() == idDoacao)
-                .findFirst();
+        var doacaoEncontrada = repository.findById(idDoacao);
 
         if(doacaoEncontrada.isEmpty()){
             throw new DoacaoNaoEncontradaException();
         }
 
-        return doacaoEncontrada.get();
+        var doacaoAtualizada = doacaoEncontrada.get();
+        doacaoAtualizada.setNome(doacaoUpdateRequest.getNome());
+        doacaoAtualizada.setEspecie(doacaoUpdateRequest.getEspecie());
+        doacaoAtualizada.setIdade(doacaoUpdateRequest.getIdade());
+        doacaoAtualizada.setNivelDeFofura(doacaoUpdateRequest.getNivelDeFofura());
+        doacaoAtualizada.setNivelDeCarencia(doacaoUpdateRequest.getNivelDeCarencia());
+
+        var doacaoSalva = repository.save(doacaoAtualizada);
+
+        return new DoacaoResponse(
+                doacaoSalva.getId(),
+                doacaoSalva.getNome(),
+                doacaoSalva.getEspecie(),
+                doacaoSalva.getIdade(),
+                doacaoSalva.getNivelDeFofura(),
+                doacaoSalva.getNivelDeCarencia(),
+                doacaoSalva.getUsuario()
+        );
     }
-
-    //metodo buscarPorNome usado no Controller
-    public DoacaoEntity buscarPorNome(String nome){
-        var doacaoEncontrada = listaDeDoacao.stream()
-                .filter(doacao -> doacao.getNome().equals(nome))
-                .findFirst();
-
-        if (doacaoEncontrada.isEmpty()){
-            throw new DoacaoNaoEncontradaException();
-        }
-
-        return doacaoEncontrada.get();
-    }
-
-    //metodo buscarPorUsuario usado no Controller
-    public DoacaoEntity buscarDoacaoPorUsuario(String usuario){
-        var doacaoEncontrada = listaDeDoacao.stream()
-                .filter(doacao -> doacao.getUsuario().equals(usuario))
-                .findAny();
-
-        if (doacaoEncontrada.isEmpty()){
-            throw new DoacaoNaoEncontradaException();
-        }
-
-        return doacaoEncontrada.get();
-    }
-
-
-    public DoacaoEntity deletarDoacao (int idDoacao){
-        var doacaoEncontrada = listaDeDoacao.stream()
-                .filter(doacao -> doacao.getId() == idDoacao)
-                .findFirst();
-
-        if (doacaoEncontrada.isEmpty()){
-            throw new DoacaoNaoEncontradaException();
-        }
-
-        var doacao = doacaoEncontrada.get();
-        listaDeDoacao.remove(doacao);
-
-        return doacao;
-    }
-
-    public DoacaoEntity atualizarDoacao (int idDoacao , DoacaoUpdateRequest doacaoUpdateRequest){
-
-        var doacaoEncontrada = listaDeDoacao.stream()
-                .filter(doacao -> doacao.getId() == idDoacao)
-                .findFirst();
-
-        if (doacaoEncontrada.isEmpty()){
-            throw new DoacaoNaoEncontradaException();
-        }
-
-        var doacao = doacaoEncontrada.get();
-        doacao.setNome(doacaoUpdateRequest.getNome());
-        doacao.setEspecie(doacaoUpdateRequest.getEspecie());
-        doacao.setIdade(doacaoUpdateRequest.getIdade());
-        doacao.setNivelDeFofura(doacaoUpdateRequest.getNivelDeFofura());
-        doacao.setNivelDeCarencia(doacaoUpdateRequest.getNivelDeCarencia());
-
-        return doacaoEncontrada.get();
-
-    }
-
 
 
 }

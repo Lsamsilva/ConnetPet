@@ -76,7 +76,7 @@ public class UsuariosController {
 
     }
 
-    //Atualizar campo
+    //Atualizar campos
     @PutMapping(value = "api/usuario/{idUsuario}")
     @CrossOrigin
     public ResponseEntity<UsuarioResponse> atualizarUsuario(

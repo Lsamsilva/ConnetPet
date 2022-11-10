@@ -9,7 +9,7 @@ import javax.validation.constraints.Email;
 import java.time.LocalDate;
 
 @Entity
-@Table(name = "usuario")
+@Table(name = "tb_usuario")
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
