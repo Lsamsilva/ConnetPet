@@ -1,18 +1,12 @@
 package projetoFinal.conectPet.service;
 
 import org.springframework.stereotype.Service;
-import projetoFinal.conectPet.domain.dto.DoacaoUpdateRequest;
 import projetoFinal.conectPet.domain.dto.UsuarioCreateRequest;
 import projetoFinal.conectPet.domain.dto.UsuarioResponse;
 import projetoFinal.conectPet.domain.dto.UsuarioUpdateRequest;
-import projetoFinal.conectPet.domain.entity.DoacaoEntity;
 import projetoFinal.conectPet.domain.entity.UsuarioEntity;
-import projetoFinal.conectPet.exception.DoacaoNaoEncontradaException;
 import projetoFinal.conectPet.exception.UsuarioNaoEncontradoException;
-import repository.UsuariosRepository;
-
-import java.util.ArrayList;
-import java.util.List;
+import projetoFinal.conectPet.repository.UsuariosRepository;
 
 @Service
 public class UsuariosService {
@@ -29,6 +23,7 @@ public class UsuariosService {
         novoUsuario.setEmail(usuarioCreateRequest.getEmail());
         novoUsuario.setCidade(usuarioCreateRequest.getCidade());
         novoUsuario.setEstado(usuarioCreateRequest.getEstado());
+
 
         var usuarioSalvo = repository.save(novoUsuario);
         return new UsuarioResponse(
@@ -83,7 +78,7 @@ public class UsuariosService {
     /*public void deletarUsuario(Integer idUsuario ){
 
         try{
-            repository.deleteById(idUsuario);
+            projetoFinal.conectPet.repository.deleteById(idUsuario);
 
             return UsuarioResponse(
 
