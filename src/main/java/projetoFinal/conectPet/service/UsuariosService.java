@@ -76,20 +76,6 @@ public class UsuariosService {
     }
 
 
-    /*public void deletarUsuario(Integer idUsuario ){
-
-        try{
-            projetoFinal.conectPet.repository.deleteById(idUsuario);
-
-            return UsuarioResponse(
-
-            );
-        }
-        catch (UsuarioNaoEncontradoException e){
-            throw new UsuarioNaoEncontradoException();
-        }
-    }*/
-
     public UsuarioResponse atualizarUsuario(Integer idUsuario , UsuarioUpdateRequest usuarioUpdateResquest){
 
         var usuarioEncontrado = repository.findById(idUsuario);

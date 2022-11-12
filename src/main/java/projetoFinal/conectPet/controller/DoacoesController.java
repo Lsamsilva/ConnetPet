@@ -64,13 +64,12 @@ public class DoacoesController {
         return ResponseEntity.ok(doacaoResponse);
     }
 
-    /*Consulta dos animais por Usuario  FAZER!!!
-    @GetMapping(value = "api/doacoes/usuario/{id_usuario}")
-    public ResponseEntity<DoacaoEntity> buscarPorUsuario(@PathVariable String id_usuario){
-        var doacaoResponse = service.buscarDoacaoPorUsuario(id_usuario);
+    /*Consulta dos animais por Usuario
+    @GetMapping(value = "api/doacoes/usuario/{idUsuario}")
+    public ResponseEntity<DoacaoResponse> buscarPorUsuario(@PathVariable Integer idUsuario){
+        var doacaoResponse = service.buscarDoacaoPorUsuario(idUsuario);
 
         return ResponseEntity.ok(doacaoResponse);
-
     }*/
 
 
@@ -80,9 +79,9 @@ public class DoacoesController {
     public ResponseEntity<Optional<DoacaoEntity>> deletarDoacao (@PathVariable Integer idDoacao){
         try{
             doacaoRepository.deleteById(idDoacao);
-            return new ResponseEntity<Optional<DoacaoEntity>>(HttpStatus.OK);
+            return new ResponseEntity<>(HttpStatus.OK);
         }catch (NoSuchElementException e){
-            return new ResponseEntity<Optional<DoacaoEntity>>(HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
 

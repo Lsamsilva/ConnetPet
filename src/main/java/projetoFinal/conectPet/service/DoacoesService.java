@@ -10,6 +10,7 @@ import projetoFinal.conectPet.domain.entity.UsuarioEntity;
 import projetoFinal.conectPet.exception.DoacaoInvalidoException;
 import projetoFinal.conectPet.exception.DoacaoNaoEncontradaException;
 import projetoFinal.conectPet.repository.DoacaoRepository;
+import projetoFinal.conectPet.repository.UsuariosRepository;
 
 import javax.persistence.criteria.CriteriaBuilder;
 import java.util.ArrayList;
@@ -63,6 +64,17 @@ public class DoacoesService {
                 doacaoSalva.getUsuario()
         );
     }
+
+    /*public DoacaoResponse buscarDoacaoPorUsuario (Integer id){
+        var usuarioEncontrado = repository.findByUsuario(id);
+
+        var doacaoUsuario = usuarioEncontrado.getUsuario();
+
+        return new DoacaoResponse(
+
+        );
+
+    }*/
 
     public DoacaoResponse buscarPorNome (String nome){
 

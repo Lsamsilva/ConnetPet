@@ -69,9 +69,9 @@ public class UsuariosController {
     public ResponseEntity<Optional<UsuarioEntity>> deletarUsuario (@PathVariable Integer idUsuario){
         try{
             usuariosRepository.deleteById(idUsuario);
-            return new ResponseEntity<Optional<UsuarioEntity>>(HttpStatus.OK);
+            return new ResponseEntity<>(HttpStatus.OK);
         }catch (NoSuchElementException e){
-            return new ResponseEntity<Optional<UsuarioEntity>>(HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
 
     }
