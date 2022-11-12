@@ -4,6 +4,7 @@ import lombok.Data;
 
 import javax.validation.constraints.NotEmpty;
 import java.time.LocalDate;
+import java.util.Date;
 
 @Data
 public class UsuarioCreateRequest {
@@ -15,7 +16,7 @@ public class UsuarioCreateRequest {
     private String cpf;
 
     @NotEmpty(message = "Data de Nascimento deve ser definida.")
-    private String dataNascimento;
+    private Date dataNascimento;
 
     @NotEmpty(message = "E-mail deve ser definido.")
     private String email;

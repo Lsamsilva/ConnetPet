@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import javax.persistence.*;
 import javax.validation.constraints.Email;
 import java.time.LocalDate;
+import java.util.Date;
 
 @Entity
 @Table(name = "tb_usuario")
@@ -26,7 +27,7 @@ public class UsuarioEntity {
     private String cpf;
 
     @Column(name = "data_nascimento")
-    private String dataNascimento;
+    private Date dataNascimento;
 
     @Email
     @Column(nullable = false)

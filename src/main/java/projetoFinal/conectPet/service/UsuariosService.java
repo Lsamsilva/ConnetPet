@@ -5,8 +5,13 @@ import projetoFinal.conectPet.domain.dto.UsuarioCreateRequest;
 import projetoFinal.conectPet.domain.dto.UsuarioResponse;
 import projetoFinal.conectPet.domain.dto.UsuarioUpdateRequest;
 import projetoFinal.conectPet.domain.entity.UsuarioEntity;
+import projetoFinal.conectPet.exception.UsuarioNaoAutorizadoException;
 import projetoFinal.conectPet.exception.UsuarioNaoEncontradoException;
 import projetoFinal.conectPet.repository.UsuariosRepository;
+
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
 
 @Service
 public class UsuariosService {
@@ -21,20 +26,49 @@ public class UsuariosService {
         novoUsuario.setNome(usuarioCreateRequest.getNome());
         novoUsuario.setCpf(usuarioCreateRequest.getCpf());
         novoUsuario.setEmail(usuarioCreateRequest.getEmail());
+        novoUsuario.setDataNascimento(usuarioCreateRequest.getDataNascimento());
         novoUsuario.setCidade(usuarioCreateRequest.getCidade());
         novoUsuario.setEstado(usuarioCreateRequest.getEstado());
 
+        Date data = novoUsuario.getDataNascimento();
+        int idadeAtual = calculaIdade(data);
+
+        if (idadeAtual < 18){
+            throw new UsuarioNaoAutorizadoException();
+        }
 
         var usuarioSalvo = repository.save(novoUsuario);
         return new UsuarioResponse(
                 usuarioSalvo.getId(),
-                usuarioCreateRequest.getNome(),
-                usuarioCreateRequest.getCpf(),
-                usuarioCreateRequest.getDataNascimento(),
-                usuarioCreateRequest.getEmail(),
-                usuarioCreateRequest.getCidade(),
-                usuarioCreateRequest.getEstado()
+                usuarioSalvo.getNome(),
+                usuarioSalvo.getCpf(),
+                usuarioSalvo.getDataNascimento(),
+                usuarioSalvo.getEmail(),
+                usuarioSalvo.getCidade(),
+                usuarioSalvo.getEstado()
         );
+
+    }
+
+    public static int calculaIdade(java.util.Date dataNasc){
+
+        Calendar dataNascimento = Calendar.getInstance();
+        dataNascimento.setTime(dataNasc);
+
+        Calendar hoje = Calendar.getInstance();
+
+        int idade = hoje.get(Calendar.YEAR) - dataNascimento.get(Calendar.YEAR);
+
+        if (hoje.get(Calendar.MONTH) < dataNascimento.get(Calendar.MONTH)){
+            idade--;
+        }else{
+            if (hoje.get(Calendar.MONTH) == dataNascimento.get(Calendar.MONTH) && hoje.get(Calendar.DAY_OF_MONTH)
+                    < dataNascimento.get(Calendar.DAY_OF_MONTH)){
+                idade--;
+            }
+        }
+
+        return idade;
     }
 
     public UsuarioResponse buscarPorId(Integer idUsuario) {
