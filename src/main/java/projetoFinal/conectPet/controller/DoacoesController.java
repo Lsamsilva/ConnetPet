@@ -1,8 +1,10 @@
 package projetoFinal.conectPet.controller;
 
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import projetoFinal.conectPet.domain.dto.DoacaoCreateRequest;
 import projetoFinal.conectPet.domain.dto.DoacaoResponse;
 import projetoFinal.conectPet.domain.dto.DoacaoUpdateRequest;
@@ -11,6 +13,7 @@ import projetoFinal.conectPet.repository.DoacaoRepository;
 import projetoFinal.conectPet.service.DoacoesService;
 
 import javax.validation.Valid;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -28,10 +31,13 @@ public class DoacoesController {
     }
 
     //Criar Cadastro Pet
-    @PostMapping(value = "api/doacoes")
+    @RequestMapping(value="api/doacoes", method=RequestMethod.POST, consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @CrossOrigin
-    public ResponseEntity<DoacaoResponse> criarDoacao (@RequestBody @Valid DoacaoCreateRequest doacao){
-        var doacaoResponse = service.criarDoacao(doacao);
+    public ResponseEntity<DoacaoResponse> criarDoacao (
+            @RequestParam(required=true, value="image") MultipartFile image,
+            @RequestParam(required=true, value="jsonData") String jsonData
+    ) throws IOException {
+        var doacaoResponse = service.criarDoacao(image, jsonData);
         return ResponseEntity.ok(doacaoResponse);
     }
 
@@ -87,15 +93,16 @@ public class DoacoesController {
 
 
     //Atualizar campos
-    @PutMapping(value = "api/doacao/{idDoacao}")
+    //@PutMapping(value = "api/doacao/{idDoacao}")
+    @RequestMapping(value="api/doacao/{idDoacao}", method=RequestMethod.PUT, consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @CrossOrigin
     public ResponseEntity<DoacaoResponse> atualizarDoacao(
-            @PathVariable int idDoacao,
-            @RequestBody @Valid DoacaoUpdateRequest doacaoUpdateRequest){
-        var doacao = service.atualizarDoacao(idDoacao , doacaoUpdateRequest);
+            @RequestParam(required=true, value="idDoacao") Integer idDoacao,
+            @RequestParam(required=true, value="image") MultipartFile image,
+            @RequestParam(required=true, value="jsonData") String jsonData) throws IOException{
+        var doacao = service.atualizarDoacao(idDoacao , image, jsonData);
         return ResponseEntity.ok(doacao);
     }
-
 }
 
 

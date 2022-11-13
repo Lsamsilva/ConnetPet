@@ -32,6 +32,8 @@ public class DoacaoEntity {
     @Column( nullable = false , name = "nivel_carencia")
     private Integer nivelDeCarencia;
 
+    @Column( nullable = false , name = "imagem")
+    private String imagem;
 
     //relacionamento de muitas doacoes para 1 usuario
     @ManyToOne
