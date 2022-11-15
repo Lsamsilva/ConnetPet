@@ -16,6 +16,7 @@ public class DoacaoResponse {
     private Integer idade;
     private Integer nivelDeFofura;
     private Integer nivelDeCarencia;
+    private String imagem;
     private UsuarioEntity usuario;
 
 }

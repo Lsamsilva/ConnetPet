@@ -7,7 +7,5 @@ import projetoFinal.conectPet.domain.entity.UsuarioEntity;
 
 @Repository
 public interface DoacaoRepository extends JpaRepository<DoacaoEntity , Integer> {
-
     DoacaoEntity findByNome (String nome);
-
 }
