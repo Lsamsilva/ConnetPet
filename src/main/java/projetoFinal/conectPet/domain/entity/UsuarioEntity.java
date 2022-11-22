@@ -39,5 +39,7 @@ public class UsuarioEntity {
     @Column(nullable = false , length = 50)
     private String estado;
 
+    @Column(nullable = false , length = 8)
+    private Integer senha;
 
 }

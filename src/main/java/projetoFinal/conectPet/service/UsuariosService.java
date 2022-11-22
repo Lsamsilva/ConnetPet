@@ -29,6 +29,7 @@ public class UsuariosService {
         novoUsuario.setDataNascimento(usuarioCreateRequest.getDataNascimento());
         novoUsuario.setCidade(usuarioCreateRequest.getCidade());
         novoUsuario.setEstado(usuarioCreateRequest.getEstado());
+        novoUsuario.setSenha(usuarioCreateRequest.getSenha());
 
         Date data = novoUsuario.getDataNascimento();
         int idadeAtual = calculaIdade(data);

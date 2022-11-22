@@ -27,4 +27,7 @@ public class UsuarioCreateRequest {
     @NotEmpty(message = "Estado deve ser definido.")
     private String estado;
 
+    @NotEmpty(message = "Senha deve ser definida.")
+    private String senha;
+
 }

@@ -9,4 +9,7 @@ public interface UsuariosRepository extends JpaRepository<UsuarioEntity , Intege
 
     UsuarioEntity findByNome(String nome);
 
+    UsuarioEntity findByCpf(String cpf);
+
+    UsuarioEntity findBySenha(Integer senha);
 }
