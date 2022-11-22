@@ -28,6 +28,6 @@ public class UsuarioCreateRequest {
     private String estado;
 
     @NotEmpty(message = "Senha deve ser definida.")
-    private String senha;
+    private Integer senha;
 
 }
