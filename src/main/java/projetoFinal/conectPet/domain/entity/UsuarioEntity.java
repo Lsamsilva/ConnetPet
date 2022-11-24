@@ -39,7 +39,7 @@ public class UsuarioEntity {
     @Column(nullable = false , length = 50)
     private String estado;
 
-    @Column(nullable = false , length = 8)
+    @Column(nullable = false , length = 6)
     private Integer senha;
 
 }
