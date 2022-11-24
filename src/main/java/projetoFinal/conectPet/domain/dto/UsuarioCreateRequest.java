@@ -3,6 +3,7 @@ package projetoFinal.conectPet.domain.dto;
 import lombok.Data;
 
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 import java.util.Date;
 
@@ -27,7 +28,7 @@ public class UsuarioCreateRequest {
     @NotEmpty(message = "Estado deve ser definido.")
     private String estado;
 
-    @NotEmpty(message = "Senha deve ser definida.")
+    @NotNull(message = "Senha deve ser definida.")
     private Integer senha;
 
 }
