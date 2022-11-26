@@ -1,26 +1,28 @@
 package projetoFinal.conectPet.service;
 
 import org.springframework.stereotype.Service;
-import projetoFinal.conectPet.domain.dto.UsuarioCreateRequest;
-import projetoFinal.conectPet.domain.dto.UsuarioResponse;
-import projetoFinal.conectPet.domain.dto.UsuarioUpdateRequest;
+import projetoFinal.conectPet.domain.dto.UsuarioCreateRequestDTO;
+import projetoFinal.conectPet.domain.dto.UsuarioResponseDTO;
+import projetoFinal.conectPet.domain.dto.UsuarioUpdateRequestDTO;
 import projetoFinal.conectPet.domain.entity.UsuarioEntity;
 import projetoFinal.conectPet.exception.UsuarioNaoAutorizadoException;
 import projetoFinal.conectPet.exception.UsuarioNaoEncontradoException;
 import projetoFinal.conectPet.repository.UsuariosRepository;
 
-import java.util.Calendar;
-import java.util.Date;
-import java.util.GregorianCalendar;
+import java.sql.Date;
+import java.time.LocalDate;
+import java.time.Period;
 
 @Service
 public class UsuariosService {
 
     private final UsuariosRepository repository;
 
-    public UsuariosService (final UsuariosRepository repository){this.repository = repository;}
+    public UsuariosService(final UsuariosRepository repository) {
+        this.repository = repository;
+    }
 
-    public UsuarioResponse criarUsuario (UsuarioCreateRequest usuarioCreateRequest){
+    public UsuarioResponseDTO criarUsuario(UsuarioCreateRequestDTO usuarioCreateRequest) {
 
         var novoUsuario = new UsuarioEntity();
         novoUsuario.setNome(usuarioCreateRequest.getNome());
@@ -32,14 +34,14 @@ public class UsuariosService {
         novoUsuario.setSenha(usuarioCreateRequest.getSenha());
 
         Date data = novoUsuario.getDataNascimento();
-        int idadeAtual = calculaIdade(data);
+        int idadeAtual = calcularIdade(data);
 
-        if (idadeAtual < 18){
+        if (idadeAtual < 18) {
             throw new UsuarioNaoAutorizadoException();
         }
 
         var usuarioSalvo = repository.save(novoUsuario);
-        return new UsuarioResponse(
+        return new UsuarioResponseDTO(
                 usuarioSalvo.getId(),
                 usuarioSalvo.getNome(),
                 usuarioSalvo.getCpf(),
@@ -51,7 +53,16 @@ public class UsuariosService {
 
     }
 
-    public static int calculaIdade(java.util.Date dataNasc){
+    private int calcularIdade(Date dataNascimento) {
+        LocalDate today = LocalDate.now();
+        LocalDate birthdate = dataNascimento.toLocalDate();
+        Period period = Period.between(birthdate, today);
+
+        return period.getYears();
+    }
+
+
+    /*public static int calculaIdade(java.sql.Date dataNasc){
 
         Calendar dataNascimento = Calendar.getInstance();
         dataNascimento.setTime(dataNasc);
@@ -70,17 +81,18 @@ public class UsuariosService {
         }
 
         return idade;
-    }
+    }*/
 
-    public UsuarioResponse buscarPorId(Integer idUsuario) {
+    public UsuarioResponseDTO buscarPorId(Integer idUsuario) {
+
         var usuarioEncontrado = repository.findById(idUsuario);
 
-        if(usuarioEncontrado.isEmpty()){
-           //throw new UsuarioNaoEncontradoException();
+        if (usuarioEncontrado.isEmpty()) {
+            throw new UsuarioNaoEncontradoException();
         }
 
-       var usuarioSalvo = usuarioEncontrado.get();
-        return new UsuarioResponse(
+        var usuarioSalvo = usuarioEncontrado.get();
+        return new UsuarioResponseDTO(
                 usuarioSalvo.getId(),
                 usuarioSalvo.getNome(),
                 usuarioSalvo.getCpf(),
@@ -91,12 +103,32 @@ public class UsuariosService {
         );
     }
 
-    public UsuarioResponse buscarPorNome(String nome){
+    public UsuarioResponseDTO verificarLogin(String cpf, Integer senha) {
+        var usuarioEncontrado = repository.findByCpfAndSenha(cpf, senha);
 
-        try{
+        if (usuarioEncontrado.isEmpty()) {
+            throw new UsuarioNaoAutorizadoException();
+        }
+
+        var usuario = usuarioEncontrado.get();
+        return new UsuarioResponseDTO(
+                usuario.getId(),
+                usuario.getNome(),
+                usuario.getCpf(),
+                usuario.getDataNascimento(),
+                usuario.getEmail(),
+                usuario.getCidade(),
+                usuario.getEstado()
+        );
+
+    }
+
+    public UsuarioResponseDTO buscarPorNome(String nome) {
+
+        try {
             var nomeEncontrado = repository.findByNome(nome);
 
-            return new UsuarioResponse(
+            return new UsuarioResponseDTO(
                     nomeEncontrado.getId(),
                     nomeEncontrado.getNome(),
                     nomeEncontrado.getCpf(),
@@ -105,17 +137,17 @@ public class UsuariosService {
                     nomeEncontrado.getCidade(),
                     nomeEncontrado.getEstado()
             );
-        }catch (UsuarioNaoEncontradoException e){
+        } catch (UsuarioNaoEncontradoException e) {
             throw new UsuarioNaoEncontradoException();
         }
     }
 
 
-    public UsuarioResponse atualizarUsuario(Integer idUsuario , UsuarioUpdateRequest usuarioUpdateResquest){
+    public UsuarioResponseDTO atualizarUsuario(Integer idUsuario, UsuarioUpdateRequestDTO usuarioUpdateResquest) {
 
         var usuarioEncontrado = repository.findById(idUsuario);
 
-        if (usuarioEncontrado.isEmpty()){
+        if (usuarioEncontrado.isEmpty()) {
             throw new UsuarioNaoEncontradoException();
         }
 
@@ -125,7 +157,7 @@ public class UsuariosService {
         usuarioAtualizado.setEstado(usuarioUpdateResquest.getEstado());
 
         var usuarioSalvo = repository.save(usuarioAtualizado);
-        return new UsuarioResponse(
+        return new UsuarioResponseDTO(
                 usuarioSalvo.getId(),
                 usuarioSalvo.getNome(),
                 usuarioSalvo.getEmail(),

@@ -1,14 +1,17 @@
 package projetoFinal.conectPet.domain.dto;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
-import java.time.LocalDate;
-import java.util.Date;
+import java.sql.Date;
 
 @Data
-public class UsuarioCreateRequest {
+@AllArgsConstructor
+@NoArgsConstructor
+public class UsuarioCreateRequestDTO {
 
     @NotEmpty(message = "Nome deve ser definido.")
     private String nome;
@@ -16,7 +19,7 @@ public class UsuarioCreateRequest {
     @NotEmpty(message = "Número do documento deve ser definido.")
     private String cpf;
 
-    @NotEmpty(message = "Data de Nascimento deve ser definida.")
+    @NotNull(message = "Data de Nascimento deve ser definida.")
     private Date dataNascimento;
 
     @NotEmpty(message = "E-mail deve ser definido.")

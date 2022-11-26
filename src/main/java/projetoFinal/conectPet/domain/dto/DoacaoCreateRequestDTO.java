@@ -7,7 +7,7 @@ import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
 @Data
-public class DoacaoCreateRequest {
+public class DoacaoCreateRequestDTO {
 
     @NotEmpty(message = "Nome deve ser definido.")
     private String nome;

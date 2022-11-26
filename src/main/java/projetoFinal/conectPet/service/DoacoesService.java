@@ -4,24 +4,17 @@ package projetoFinal.conectPet.service;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
-import projetoFinal.conectPet.domain.dto.DoacaoCreateRequest;
-import projetoFinal.conectPet.domain.dto.DoacaoResponse;
-import projetoFinal.conectPet.domain.dto.DoacaoUpdateRequest;
+import projetoFinal.conectPet.domain.dto.DoacaoResponseDTO;
 import projetoFinal.conectPet.domain.entity.DoacaoEntity;
-import projetoFinal.conectPet.domain.entity.UsuarioEntity;
-import projetoFinal.conectPet.exception.DoacaoInvalidoException;
 import projetoFinal.conectPet.exception.DoacaoNaoEncontradaException;
 import projetoFinal.conectPet.repository.DoacaoRepository;
-import projetoFinal.conectPet.repository.UsuariosRepository;
 
-import javax.persistence.criteria.CriteriaBuilder;
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 
 @Service
 public class DoacoesService {
+
     //caminho do destino das imagens
     private final String FOLDER_PATH="c://Users/Acer/Fotos/";
     private final DoacaoRepository repository;
@@ -29,10 +22,11 @@ public class DoacoesService {
     ObjectMapper objectMapper = new ObjectMapper();
     public DoacoesService (final DoacaoRepository repository){this.repository = repository;}
 
-    public DoacaoResponse criarDoacao (MultipartFile image, String jsonData) throws IOException {
+    public DoacaoResponseDTO criarDoacao (MultipartFile image, String jsonData) throws IOException {
+
         //caminho do destino com o arquivo
         String filePath = FOLDER_PATH+image.getOriginalFilename();
-        DoacaoResponse doacaoRequest = objectMapper.readValue(jsonData, DoacaoResponse.class);
+        DoacaoResponseDTO doacaoRequest = objectMapper.readValue(jsonData, DoacaoResponseDTO.class);
         doacaoRequest.setImagem(filePath);
 
         var novaDoacao = new DoacaoEntity();
@@ -49,7 +43,7 @@ public class DoacoesService {
         //salva imagem no caminho local
         image.transferTo(new File(filePath));
 
-        return new DoacaoResponse(
+        return new DoacaoResponseDTO(
                 doacaoSalva.getId(),
                 doacaoSalva.getNome(),
                 doacaoSalva.getEspecie(),
@@ -62,15 +56,16 @@ public class DoacoesService {
 
     }
 
-    public DoacaoResponse buscarPorId (Integer idDoacao){
+    public DoacaoResponseDTO buscarPorId (Integer idDoacao){
+
         var doacaoEncontrada = repository.findById(idDoacao);
 
         if (doacaoEncontrada.isEmpty()){
-            //throw new DoacaoNaoEncontradoException();
+            throw new DoacaoNaoEncontradaException();
         }
 
         var doacaoSalva = doacaoEncontrada.get();
-        return new DoacaoResponse(
+        return new DoacaoResponseDTO(
                 doacaoSalva.getId(),
                 doacaoSalva.getNome(),
                 doacaoSalva.getEspecie(),
@@ -82,23 +77,12 @@ public class DoacoesService {
         );
     }
 
-    /*public DoacaoResponse buscarDoacaoPorUsuario (Integer id){
-        var usuarioEncontrado = repository.findByUsuario(id);
-
-        var doacaoUsuario = usuarioEncontrado.getUsuario();
-
-        return new DoacaoResponse(
-
-        );
-
-    }*/
-
-    public DoacaoResponse buscarPorNome (String nome){
+    public DoacaoResponseDTO buscarPorNome (String nome){
 
         try{
             var doacaoEncontrada = repository.findByNome(nome);
 
-            return new DoacaoResponse(
+            return new DoacaoResponseDTO(
                     doacaoEncontrada.getId(),
                     doacaoEncontrada.getNome(),
                     doacaoEncontrada.getEspecie(),
@@ -113,10 +97,12 @@ public class DoacoesService {
         }
     }
 
-    public DoacaoResponse atualizarDoacao (Integer idDoacao , MultipartFile image, String jsonData) throws IOException{
+    public DoacaoResponseDTO atualizarDoacao (Integer idDoacao , MultipartFile image, String jsonData)
+            throws IOException{
+
         //caminho do destino com o arquivo
         String filePath = FOLDER_PATH+image.getOriginalFilename();
-        DoacaoResponse doacaoRequest = objectMapper.readValue(jsonData, DoacaoResponse.class);
+        DoacaoResponseDTO doacaoRequest = objectMapper.readValue(jsonData, DoacaoResponseDTO.class);
         doacaoRequest.setImagem(filePath);
 
         var doacaoEncontrada = repository.findById(idDoacao);
@@ -135,7 +121,7 @@ public class DoacoesService {
 
         var doacaoSalva = repository.save(doacaoAtualizada);
 
-        return new DoacaoResponse(
+        return new DoacaoResponseDTO(
                 doacaoSalva.getId(),
                 doacaoSalva.getNome(),
                 doacaoSalva.getEspecie(),
