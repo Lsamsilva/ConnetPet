@@ -1,5 +1,6 @@
 package projetoFinal.conectPet.controller;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -20,7 +21,7 @@ import java.util.Optional;
 public class DoacoesController {
 
     private final DoacoesService service;
-
+    @Autowired
     private DoacaoRepository doacaoRepository;
 
     public DoacoesController(final DoacoesService service){

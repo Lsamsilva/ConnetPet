@@ -33,8 +33,7 @@ public class DoacoesService {
         novaDoacao.setNome(doacaoRequest.getNome());
         novaDoacao.setEspecie(doacaoRequest.getEspecie());
         novaDoacao.setIdade(doacaoRequest.getIdade());
-        novaDoacao.setNivelDeFofura(doacaoRequest.getNivelDeFofura());
-        novaDoacao.setNivelDeCarencia(doacaoRequest.getNivelDeCarencia());
+        novaDoacao.setSexo(doacaoRequest.getSexo());
         novaDoacao.setImagem(doacaoRequest.getImagem());
         novaDoacao.setUsuario(doacaoRequest.getUsuario());
 
@@ -48,8 +47,7 @@ public class DoacoesService {
                 doacaoSalva.getNome(),
                 doacaoSalva.getEspecie(),
                 doacaoSalva.getIdade(),
-                doacaoSalva.getNivelDeFofura(),
-                doacaoSalva.getNivelDeCarencia(),
+                doacaoSalva.getSexo(),
                 doacaoSalva.getImagem(),
                 doacaoSalva.getUsuario()
         );
@@ -70,8 +68,7 @@ public class DoacoesService {
                 doacaoSalva.getNome(),
                 doacaoSalva.getEspecie(),
                 doacaoSalva.getIdade(),
-                doacaoSalva.getNivelDeFofura(),
-                doacaoSalva.getNivelDeCarencia(),
+                doacaoSalva.getSexo(),
                 doacaoSalva.getImagem(),
                 doacaoSalva.getUsuario()
         );
@@ -87,8 +84,7 @@ public class DoacoesService {
                     doacaoEncontrada.getNome(),
                     doacaoEncontrada.getEspecie(),
                     doacaoEncontrada.getIdade(),
-                    doacaoEncontrada.getNivelDeFofura(),
-                    doacaoEncontrada.getNivelDeCarencia(),
+                    doacaoEncontrada.getSexo(),
                     doacaoEncontrada.getImagem(),
                     doacaoEncontrada.getUsuario()
             );
@@ -115,8 +111,7 @@ public class DoacoesService {
         doacaoAtualizada.setNome(doacaoRequest.getNome());
         doacaoAtualizada.setEspecie(doacaoRequest.getEspecie());
         doacaoAtualizada.setIdade(doacaoRequest.getIdade());
-        doacaoAtualizada.setNivelDeFofura(doacaoRequest.getNivelDeFofura());
-        doacaoAtualizada.setNivelDeCarencia(doacaoRequest.getNivelDeCarencia());
+        doacaoAtualizada.setSexo(doacaoRequest.getSexo());
         doacaoAtualizada.setImagem(doacaoRequest.getImagem());
 
         var doacaoSalva = repository.save(doacaoAtualizada);
@@ -126,8 +121,7 @@ public class DoacoesService {
                 doacaoSalva.getNome(),
                 doacaoSalva.getEspecie(),
                 doacaoSalva.getIdade(),
-                doacaoSalva.getNivelDeFofura(),
-                doacaoSalva.getNivelDeCarencia(),
+                doacaoSalva.getSexo(),
                 doacaoSalva.getImagem(),
                 doacaoSalva.getUsuario()
         );

@@ -26,11 +26,8 @@ public class DoacaoEntity {
     @Column
     private Integer idade;
 
-    @Column(nullable = false , name = "nivel_fofura")
-    private Integer nivelDeFofura;
-
-    @Column( nullable = false , name = "nivel_carencia")
-    private Integer nivelDeCarencia;
+    @Column(nullable = false , name = "sexo")
+    private String sexo;
 
     @Column( nullable = false , name = "imagem")
     private String imagem;
