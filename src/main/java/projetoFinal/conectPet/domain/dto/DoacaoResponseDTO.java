@@ -15,6 +15,7 @@ public class DoacaoResponseDTO {
     private String especie;
     private Integer idade;
     private String sexo;
+    private String email;
     private String imagem;
     private UsuarioEntity usuario;
 

@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import javax.validation.constraints.Email;
 
 @Entity
 @Table(name = "tb_doacao")
@@ -28,6 +29,10 @@ public class DoacaoEntity {
 
     @Column(nullable = false , name = "sexo")
     private String sexo;
+
+    @Email
+    @Column(nullable = false)
+    private String email;
 
     @Column( nullable = false , name = "imagem")
     private String imagem;
