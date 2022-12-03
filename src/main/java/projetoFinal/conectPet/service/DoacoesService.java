@@ -34,6 +34,7 @@ public class DoacoesService {
         novaDoacao.setEspecie(doacaoRequest.getEspecie());
         novaDoacao.setIdade(doacaoRequest.getIdade());
         novaDoacao.setSexo(doacaoRequest.getSexo());
+        novaDoacao.setEmail(doacaoRequest.getEmail());
         novaDoacao.setImagem(doacaoRequest.getImagem());
         novaDoacao.setUsuario(doacaoRequest.getUsuario());
 
@@ -48,6 +49,7 @@ public class DoacoesService {
                 doacaoSalva.getEspecie(),
                 doacaoSalva.getIdade(),
                 doacaoSalva.getSexo(),
+                doacaoSalva.getEmail(),
                 doacaoSalva.getImagem(),
                 doacaoSalva.getUsuario()
         );
@@ -69,6 +71,7 @@ public class DoacoesService {
                 doacaoSalva.getEspecie(),
                 doacaoSalva.getIdade(),
                 doacaoSalva.getSexo(),
+                doacaoSalva.getEmail(),
                 doacaoSalva.getImagem(),
                 doacaoSalva.getUsuario()
         );
@@ -85,6 +88,7 @@ public class DoacoesService {
                     doacaoEncontrada.getEspecie(),
                     doacaoEncontrada.getIdade(),
                     doacaoEncontrada.getSexo(),
+                    doacaoEncontrada.getEmail(),
                     doacaoEncontrada.getImagem(),
                     doacaoEncontrada.getUsuario()
             );
@@ -112,7 +116,11 @@ public class DoacoesService {
         doacaoAtualizada.setEspecie(doacaoRequest.getEspecie());
         doacaoAtualizada.setIdade(doacaoRequest.getIdade());
         doacaoAtualizada.setSexo(doacaoRequest.getSexo());
+        doacaoAtualizada.setEmail(doacaoRequest.getEmail());
         doacaoAtualizada.setImagem(doacaoRequest.getImagem());
+
+        //salva imagem no caminho local
+        image.transferTo(new File(filePath));
 
         var doacaoSalva = repository.save(doacaoAtualizada);
 
@@ -122,6 +130,7 @@ public class DoacoesService {
                 doacaoSalva.getEspecie(),
                 doacaoSalva.getIdade(),
                 doacaoSalva.getSexo(),
+                doacaoSalva.getEmail(),
                 doacaoSalva.getImagem(),
                 doacaoSalva.getUsuario()
         );
